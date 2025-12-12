@@ -27,7 +27,7 @@ This document identifies areas of bloat, inefficiency, and redundancy in the Res
 
 **Problem:** The `DotPattern` component dynamically creates a large number of animated SVG circles based on the container dimensions. For a typical full-screen viewport, this can result in **thousands of animated elements**, each with individual `motion.circle` animations running simultaneously.
 
-```javascript
+```typescript
 // Lines 92-106 - Creates potentially thousands of dots
 const dots = Array.from(
   {
@@ -61,7 +61,7 @@ Each dot has:
 
 **Problem:** Creates 108 star elements with animations, and uses a `setInterval` that runs every 3 seconds indefinitely.
 
-```javascript
+```typescript
 // Line 58 - Creates 108 star elements
 const stars = 108;
 
@@ -149,7 +149,7 @@ Files using motion:
 
 **Problem:** Continuous CSS gradient animation runs indefinitely.
 
-```jsx
+```tsx
 className="... animate-[gradient_8s_linear_infinite]"
 ```
 
@@ -173,7 +173,7 @@ className="... animate-[gradient_8s_linear_infinite]"
 | `lib/api/resume.ts` | 45, 58, 93 | Multiple API response logs |
 
 **Additionally found in `text-area.tsx`:**
-```jsx
+```tsx
 {/* Debug info - remove after testing */}
 {submissionStatus === 'success' && (
   <div className="text-xs text-gray-500 mt-2">
