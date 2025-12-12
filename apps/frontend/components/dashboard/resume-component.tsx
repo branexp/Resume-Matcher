@@ -57,7 +57,6 @@ interface ResumeProps {
 }
 
 const Resume: React.FC<ResumeProps> = ({ resumeData }) => {
-  console.log('Rendering Resume Component with data:', resumeData);
   const { personalInfo, summary, workExperience, education, personalProjects, additional } =
     resumeData;
 

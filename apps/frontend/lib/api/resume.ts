@@ -42,8 +42,7 @@ export async function uploadJobDescriptions(
     throw new Error(`Upload failed with status ${res.status}: ${errorText}`);
   }
   const data = await res.json();
-  console.log('Job upload response:', data);
-  
+
   // Handle both array and single value responses, with proper empty array check
   let jobId: string | undefined;
   if (Array.isArray(data.job_id)) {
@@ -54,8 +53,6 @@ export async function uploadJobDescriptions(
   } else {
     jobId = data.job_id;
   }
-  
-  console.log('Extracted jobId:', jobId);
   if (!jobId) {
     throw new Error('No job ID returned from server');
   }
@@ -90,7 +87,6 @@ export async function improveResume(resumeId: string, jobId: string): Promise<Im
     throw parseError;
   }
 
-  console.log('Resume improvement response:', data);
   return data;
 }
 
