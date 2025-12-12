@@ -49,13 +49,11 @@ export default function FileUpload() {
     multiple: false,
     uploadUrl: API_RESUME_UPLOAD_URL,
     onUploadSuccess: (uploadedFile, response) => {
-      console.log('Upload successful:', uploadedFile, response);
       // uploadedFile.file is FileMetadata here, as transformed by the hook
       const data = response as Record<string, unknown> & { resume_id?: string };
       const resumeId = typeof data.resume_id === 'string' ? data.resume_id : undefined;
 
       if (!resumeId) {
-        console.error('Missing resume_id in upload response', response);
         setUploadFeedback({
           type: 'error',
           message: 'Upload succeeded but no resume ID received.',

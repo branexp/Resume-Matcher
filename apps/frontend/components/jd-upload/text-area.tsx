@@ -77,13 +77,10 @@ export default function JobDescriptionUploadTextArea() {
       setSubmissionStatus('submitting');
       try {
         const id = await uploadJobDescriptions([trimmed], resumeId);
-        console.log('Setting jobId to:', id);
         setJobId(id);
-        console.log('Setting submissionStatus to success');
         setSubmissionStatus('success');
         setFlash({ type: 'success', message: 'Job description submitted successfully!' });
       } catch (err) {
-        console.error(err);
         setSubmissionStatus('error');
         setFlash({ type: 'error', message: (err as Error).message });
       }
@@ -100,7 +97,6 @@ export default function JobDescriptionUploadTextArea() {
       setImprovedData(preview);
       router.push('/dashboard');
     } catch (err) {
-      console.error(err);
       setImprovementStatus('error');
       setFlash({ type: 'error', message: (err as Error).message });
     }
@@ -131,7 +127,6 @@ export default function JobDescriptionUploadTextArea() {
       }
       window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
     } catch (err) {
-      console.error('Unable to open resume', err);
       setFlash({
         type: 'error',
         message: (err as Error)?.message || 'Unable to open resume.',
@@ -277,13 +272,6 @@ export default function JobDescriptionUploadTextArea() {
           )}
         </Button>
       </div>
-
-      {/* Debug info - remove after testing */}
-      {submissionStatus === 'success' && (
-        <div className="text-xs text-gray-500 mt-2">
-          Debug: jobId = {jobId || 'null'}
-        </div>
-      )}
 
       {submissionStatus === 'success' && jobId && (
         <div className="flex justify-end mt-2">
