@@ -8,6 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.agent import AgentManager
+from app.agent.exceptions import StrategyError
 from app.prompt import prompt_factory
 from app.schemas.json import json_schema_factory
 from app.models import Job, Resume, ProcessedJob
@@ -108,7 +109,6 @@ class JobService:
 
         self.db.add(processed_job)
         await self.db.flush()
-        await self.db.commit()
 
         return job_id
 
@@ -125,7 +125,15 @@ class JobService:
             job_description_text,
         )
         logger.info(f"Structured Job Prompt: {prompt}")
-        raw_output = await self.json_agent_manager.run(prompt=prompt)
+        
+        try:
+            raw_output = await self.json_agent_manager.run(prompt=prompt)
+        except StrategyError as e:
+            logger.warning(f"AI failed to generate valid JSON for job extraction: {e}")
+            return None
+        except Exception as e:
+            logger.error(f"Unexpected error during AI job extraction: {e}")
+            return None
 
         try:
             structured_job: StructuredJobModel = StructuredJobModel.model_validate(

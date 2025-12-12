@@ -4,7 +4,8 @@ SCHEMA = {
     "improvements": [
         {
             "suggestion": "string",
-            "lineNumber": "string | null",
+            "lineNumber": "integer | null",
+            "section": "string | null",
         }
     ],
 }

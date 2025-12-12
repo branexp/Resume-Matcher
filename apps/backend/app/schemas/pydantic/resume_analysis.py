@@ -4,7 +4,8 @@ from pydantic import BaseModel
 
 class ImprovementItem(BaseModel):
     suggestion: str
-    lineNumber: Optional[str] = None
+    lineNumber: Optional[int] = None
+    section: Optional[str] = None
 
 
 class ResumeAnalysisModel(BaseModel):

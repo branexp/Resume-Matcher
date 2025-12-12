@@ -27,6 +27,8 @@ from app.services import (
     ResumeKeywordExtractionError,
     JobKeywordExtractionError,
 )
+from app.agent.exceptions import StrategyError, ProviderError
+from pydantic import ValidationError
 from app.schemas.pydantic import ResumeImprovementRequest
 
 resume_router = APIRouter()
@@ -217,6 +219,24 @@ async def score_and_improve(
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail=str(e),
+        )
+    except StrategyError as e:
+        logger.error(f"AI parsing error: {str(e)} - traceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to process AI response. Please try again.",
+        )
+    except ProviderError as e:
+        logger.error(f"AI provider error: {str(e)} - traceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="AI service is temporarily unavailable. Please try again later.",
+        )
+    except ValidationError as e:
+        logger.error(f"Validation error: {str(e)} - traceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Data validation failed: {str(e)}",
         )
     except Exception as e:
         logger.error(f"Error: {str(e)} - traceback: {traceback.format_exc()}")

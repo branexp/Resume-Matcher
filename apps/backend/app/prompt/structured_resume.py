@@ -1,11 +1,12 @@
 PROMPT = """
-You are a JSON extraction engine. Convert the following resume text into precisely the JSON schema specified below.
-- Map each resume section to the schema without inventing information.
-- If a field is missing in the source text, use an empty string or empty list as appropriate.
-- Preserve bullet points in the `description` arrays using short factual sentences.
-- Use "Present" if an end date is ongoing and prefer YYYY-MM-DD where dates are available.
-- Keep the `additional` section organised: list technical skills, languages, certifications/training, and awards exactly as they appear.
-- Do not compose any extra fields or commentary and output raw JSON only (no Markdown, no prose).
+Extract structured JSON from the provided resume text, ensuring strict adherence to the given schema.
+
+- Map each resume section to its corresponding schema field without adding or omitting information.
+- For missing fields, use the schema's default empty value (empty string for strings, empty list for arrays).
+- Preserve resume bullet points as brief, factual sentences in `description` arrays.
+- Use 'Present' for current end dates. When dates are provided, use the 'YYYY-MM-DD' format.
+- In the `additional` section, list items in this order: technical skills, languages, certifications/training, and awards, copying text exactly.
+- Output only a single, fully valid JSON object matching the schema. No extra fields or commentary.
 
 Schema:
 ```json
@@ -17,5 +18,7 @@ Resume:
 {1}
 ```
 
-NOTE: Please output only a valid JSON matching the EXACT schema.
+Note: Output must match the schema exactly. For each schema field:
+- If no information is found, use the defined empty value.
+- Do not add, remove, or rename fields.
 """
